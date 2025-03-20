@@ -1,34 +1,24 @@
-async function upgradeToPremium() {
-    if (isPremium) {
-        alert("You are already a premium user!");
+let miningInterval;
+let miningActive = false;
+
+function startMining() {
+    if (miningActive) {
+        alert("Mining already active!");
         return;
     }
 
-    try {
-        const payment = await Pi.createPayment({
-            amount: 1, // Payment in Pi
-            memo: "Upgrade to Premium", 
-            metadata: { type: "upgrade" },
-            onReadyForServerApproval: (paymentId) => {
-                console.log(`Payment ready for approval: ${paymentId}`);
-            },
-            onReadyForServerCompletion: (paymentId, txid) => {
-                console.log(`Payment complete: ${txid}`);
-                isPremium = true;
-                document.getElementById("status").innerText = "Status: Premium User ✅";
-                alert("Upgrade successful! You now earn double rewards.");
-            },
-            onCancel: () => {
-                alert("Upgrade canceled");
-            },
-            onError: (error) => {
-                console.error(`Error: ${error.message}`);
-                alert(`Payment failed: ${error.message}`);
-            }
-        });
+    miningActive = true;
+    miningInterval = setInterval(() => {
+        balance += 5; // Earn 5 $KADET every 24 hours
+        updateBalance();
+        console.log(`+5 $KADET mined`);
+    }, 24 * 60 * 60 * 1000); // 24 hours
 
-    } catch (error) {
-        console.error(`Error initiating payment: ${error.message}`);
-        alert(`Failed to initiate payment: ${error.message}`);
-    }
+    alert("Mining started! Come back in 24 hours to see your rewards.");
+}
+
+function stopMining() {
+    clearInterval(miningInterval);
+    miningActive = false;
+    alert("Mining stopped");
 }
