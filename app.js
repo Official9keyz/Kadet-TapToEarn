@@ -1,16 +1,6 @@
-function startMining() {
-    if (miningActive) {
-        alert("Mining already active!");
-        return;
-    }
-
-    miningActive = true;
-    miningInterval = setInterval(() => {
-        let reward = isPremium ? 10 : 5; // Premium = 10 $KADET/day, Regular = 5 $KADET/day
-        balance += reward;
-        updateBalance();
-        console.log(`+${reward} $KADET mined`);
-    }, 24 * 60 * 60 * 1000); // 24 hours
-
-    alert(`Mining started! You're earning +${isPremium ? 10 : 5} $KADET daily.`);
+function claimReferralBonus() {
+    let referralBonus = isPremium ? 20 : 10; // Premium = 20 $KADET, Regular = 10 $KADET
+    balance += referralBonus;
+    updateBalance();
+    alert(`You earned +${referralBonus} $KADET from referral!`);
 }
