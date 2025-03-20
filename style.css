@@ -1,34 +1,14 @@
-body {
-    background-color: #FFFFFF;
-    color: #000000;
-    font-family: Arial, sans-serif;
-}
-
-.button {
-    background-color: #0056B3;
-    color: #FFFFFF;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.button:hover {
-    background-color: #A00000;
-}
-
 .header {
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
     color: #000000;
-    font-size: 24px;
-    font-weight: bold;
+    font-size: 28px;
 }
 
-.highlight {
-    color: #FFC000;
-}
-
-.logo {
-    width: 120px;
-    height: auto;
+p.highlight {
+    font-size: 18px;
+    margin-top: 10px;
 }
