@@ -1,17 +1,10 @@
-#status, #mining-status {
-    font-size: 18px;
-    color: #fff;
-    background-color: #1a1a1a;
-    padding: 10px;
-    border-radius: 8px;
-    margin-top: 10px;
-    text-align: center;
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
 
-#loading {
-    font-size: 16px;
-    color: #ffcc00;
-    text-align: center;
-    padding: 5px;
-    margin-top: 10px;
+.logo {
+    width: 100px; /* Adjust size as needed */
+    height: auto;
 }
