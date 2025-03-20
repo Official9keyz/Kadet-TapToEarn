@@ -1,23 +1,60 @@
-const express = require('express');
-const app = express();
-const port = 5000;
+async function upgradeToPremium() {
+    if (isPremium) {
+        alert("You are already a premium user!");
+        return;
+    }
 
-app.use(express.json());
+    document.getElementById('loading').style.display = 'block'; // Show loading animation
 
-app.post('/approve', (req, res) => {
-    const { paymentId } = req.body;
-    console.log(`Approving payment: ${paymentId}`);
-    // TODO: Verify payment details, then approve
-    res.send({ success: true });
-});
+    try {
+        const payment = await Pi.createPayment({
+            amount: 1,
+            memo: "Upgrade to Premium", 
+            metadata: { type: "upgrade" },
+            onReadyForServerApproval: async (paymentId) => {
+                await fetch("https://your-backend-url/approve", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ paymentId })
+                });
+            },
+            onReadyForServerCompletion: async (paymentId, txid) => {
+                isPremium = true;
+                document.getElementById("status").innerText = "Status: Premium User ✅";
+                document.getElementById("loading").style.display = 'none'; // Hide loading animation
+                alert("Upgrade successful! You now earn double rewards.");
+            },
+            onCancel: () => {
+                document.getElementById("loading").style.display = 'none'; // Hide loading
+                alert("Upgrade canceled");
+            },
+            onError: (error) => {
+                document.getElementById("loading").style.display = 'none'; // Hide loading
+                alert(`Payment failed: ${error.message}`);
+            }
+        });
 
-app.post('/complete', (req, res) => {
-    const { paymentId, txid } = req.body;
-    console.log(`Completing payment: ${paymentId}, Transaction ID: ${txid}`);
-    // TODO: Confirm transaction completion
-    res.send({ success: true });
-});
+    } catch (error) {
+        document.getElementById("loading").style.display = 'none'; // Hide loading
+        alert(`Failed to initiate payment: ${error.message}`);
+    }
+}
 
-app.listen(port, () => {
-    console.log(`Backend server running on http://localhost:${port}`);
-});
+function startMining() {
+    if (miningActive) {
+        alert("Mining already active!");
+        return;
+    }
+
+    miningActive = true;
+    document.getElementById("mining-status").innerText = `Mining: Active (+${isPremium ? 10 : 5} $KADET/day)`;
+
+    miningInterval = setInterval(() => {
+        let reward = isPremium ? 10 : 5;
+        balance += reward;
+        updateBalance();
+        console.log(`+${reward} $KADET mined`);
+    }, 24 * 60 * 60 * 1000);
+
+    alert(`Mining started! You're earning +${isPremium ? 10 : 5} $KADET daily.`);
+}
