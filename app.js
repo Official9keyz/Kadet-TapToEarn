@@ -1,45 +1,23 @@
-async function upgradeToPremium() {
-    if (isPremium) {
-        alert("You are already a premium user!");
-        return;
-    }
+const express = require('express');
+const app = express();
+const port = 5000;
 
-    try {
-        const payment = await Pi.createPayment({
-            amount: 1, // Payment in Pi
-            memo: "Upgrade to Premium", 
-            metadata: { type: "upgrade" },
-            onReadyForServerApproval: async (paymentId) => {
-                // Send to backend for approval
-                await fetch("https://your-backend-url/approve", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ paymentId })
-                });
-                console.log(`Payment ready for approval: ${paymentId}`);
-            },
-            onReadyForServerCompletion: async (paymentId, txid) => {
-                // Send to backend for completion
-                await fetch("https://your-backend-url/complete", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ paymentId, txid })
-                });
-                isPremium = true;
-                document.getElementById("status").innerText = "Status: Premium User ✅";
-                alert("Upgrade successful! You now earn double rewards.");
-            },
-            onCancel: () => {
-                alert("Upgrade canceled");
-            },
-            onError: (error) => {
-                console.error(`Error: ${error.message}`);
-                alert(`Payment failed: ${error.message}`);
-            }
-        });
+app.use(express.json());
 
-    } catch (error) {
-        console.error(`Error initiating payment: ${error.message}`);
-        alert(`Failed to initiate payment: ${error.message}`);
-    }
-}
+app.post('/approve', (req, res) => {
+    const { paymentId } = req.body;
+    console.log(`Approving payment: ${paymentId}`);
+    // TODO: Verify payment details, then approve
+    res.send({ success: true });
+});
+
+app.post('/complete', (req, res) => {
+    const { paymentId, txid } = req.body;
+    console.log(`Completing payment: ${paymentId}, Transaction ID: ${txid}`);
+    // TODO: Confirm transaction completion
+    res.send({ success: true });
+});
+
+app.listen(port, () => {
+    console.log(`Backend server running on http://localhost:${port}`);
+});
