@@ -1,46 +1,41 @@
 let balance = 0;
+let dailyEarnings = 0;
+const DAILY_LIMIT = 500;
+const TAP_REWARD = 5;
+const REFERRAL_REWARD = 10;
 
+// Function to tap and earn KADET
 function tapToEarn() {
-    balance += 5; // Earn 5 $KADET per tap
+    if (dailyEarnings + TAP_REWARD <= DAILY_LIMIT) {
+        balance += TAP_REWARD;
+        dailyEarnings += TAP_REWARD;
+        updateBalance();
+    } else {
+        alert("Daily limit reached. Come back tomorrow!");
+    }
+}
+
+// Function to update balance on screen
+function updateBalance() {
     document.getElementById("balance").innerText = `Balance: ${balance} $KADET`;
 }
 
-Pi.init({ version: "2.0", sandbox: true });
-
-function upgradeToPremium() {
-    const paymentData = {
-        amount: 1, // 1 Pi for premium
-        memo: "Upgrade to Premium",
-        metadata: { action: "upgrade_to_premium" }
-    };
-
-    const paymentCallbacks = {
-        onReadyForServerApproval: (paymentId) => {
-            console.log("Payment ID:", paymentId);
-            approvePayment(paymentId);
-        },
-        onReadyForServerCompletion: (paymentId, txid) => {
-            console.log("Payment completed:", paymentId, txid);
-            balance *= 2; // Double earnings for premium users
-            document.getElementById("balance").innerText = `Balance: ${balance} $KADET`;
-            alert("Upgrade to Premium successful! Earnings doubled.");
-        },
-        onCancel: () => {
-            alert("Payment cancelled. Try again!");
-        },
-        onError: (error) => {
-            console.error("Payment error:", error);
-            alert("Payment failed. Try again!");
-        }
-    };
-
-    Pi.createPayment(paymentData, paymentCallbacks);
+// Function to handle referral bonuses
+function claimReferralBonus() {
+    balance += REFERRAL_REWARD;
+    updateBalance();
+    alert(`You earned ${REFERRAL_REWARD} $KADET for a referral!`);
 }
 
-function approvePayment(paymentId) {
-    console.log(`Approving payment: ${paymentId}`);
+// Reset daily earnings at midnight
+function resetDailyEarnings() {
+    dailyEarnings = 0;
 }
 
-function completePayment(paymentId, txid) {
-    console.log(`Payment approved: ${paymentId}, Transaction ID: ${txid}`);
-}
+// Reset daily earnings at midnight (local time)
+setInterval(() => {
+    const now = new Date();
+    if (now.getHours() === 0 && now.getMinutes() === 0) {
+        resetDailyEarnings();
+    }
+}, 60000); // Check every minute
