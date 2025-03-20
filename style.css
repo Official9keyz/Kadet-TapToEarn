@@ -1,14 +1,10 @@
-.header {
+.mining-section {
     text-align: center;
-    padding: 20px;
+    margin-top: 20px;
 }
 
-h1 {
-    color: #000000;
-    font-size: 28px;
-}
-
-p.highlight {
-    font-size: 18px;
+.status {
+    color: #0056B3;
+    font-size: 16px;
     margin-top: 10px;
 }
