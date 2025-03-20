@@ -1,10 +1,11 @@
-.mining-section {
-    text-align: center;
-    margin-top: 20px;
-}
+const miningButton = document.getElementById('start-mining');
+const statusText = document.getElementById('status');
 
-.status {
-    color: #0056B3;
-    font-size: 16px;
-    margin-top: 10px;
-}
+miningButton.addEventListener('click', () => {
+    statusText.textContent = 'Status: Mining started...';
+    
+    // Example: Increment user balance after 5 seconds (simulating mining)
+    setTimeout(() => {
+        statusText.textContent = 'Status: 10 KADET earned!';
+    }, 5000);
+});
